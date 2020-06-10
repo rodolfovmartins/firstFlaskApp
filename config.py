@@ -29,12 +29,12 @@ class Config(object):
         PORT_HOST = 8080
         URL_MAIN = 'http://%s:$s' % (IP_HOST, PORT_HOST)
 
-    app_config = {
-        'development': DevelopmentConfig(),
-        'testing': TestingConfig(),
-        'production': ProductionConfig()
-    }
+app_config = {
+    'development': Config.DevelopmentConfig(),
+    'testing': Config.TestingConfig(),
+    'production': Config.ProductionConfig()
+}
 
-    app_active = os.getenv('FLASK_ENV')
+app_active = os.getenv('FLASK_ENV')
 
 
