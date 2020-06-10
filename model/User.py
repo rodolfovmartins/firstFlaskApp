@@ -15,4 +15,4 @@ class User(db.Model):
     last_updated = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     recovey_code = db.Column(db.String(200), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=True)
-    role = db.Column(db.Integer, db.ForeignKey(Role.id), nullalbe=True)
+    role = db.Column(db.Integer, db.ForeignKey(Role.id), nullable=True)

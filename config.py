@@ -36,6 +36,9 @@ app_config = {
     'production': ProductionConfig()
 }
 
-app_active = os.getenv('FLASK_ENV')
+if os.getenv('FLASK_ENV'):
+    app_active = os.getenv('FLASK_ENV')
+else:
+    app_active = 'development'
 
 
