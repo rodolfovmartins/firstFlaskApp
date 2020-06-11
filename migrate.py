@@ -49,5 +49,4 @@ class Product(db.Model):
     category = db.Column(db.Integer(), db.ForeignKey(Category.id), nullable=False)
 
 if __name__ == '__main__':
-    db.create_all()
     manager.run()

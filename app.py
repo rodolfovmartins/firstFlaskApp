@@ -20,4 +20,16 @@ def create_app(config_name):
     def index():
         return "Flask app runing..."
 
+    @app.route('/login/')
+    def login():
+        return 'Tela de login'
+
+    @app.route('/recovery-password/')
+    def recovery_password():
+        return 'Tela de recuperar a senha'
+
+    @app.route('/profile/<int:id>/')
+    def profile(id):
+        return 'O ID do usuário é %d' % id
+
     return app
