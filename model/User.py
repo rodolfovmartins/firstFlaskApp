@@ -21,7 +21,7 @@ class User(db.Model):
     funcao = relationship(Role)
 
     def __repr__(self):
-        return '%s - %s' % (self.id, self.name)
+        return '%s - %s' % (self.id, self.username)
 
     def get_user_by_email(self):
         return ''
