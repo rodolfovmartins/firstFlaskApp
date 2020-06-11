@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import Flask
+from flask import Flask, request, redirect, render_template
 from config import app_config, app_active
 from flask_sqlalchemy import SQLAlchemy
+from controller.User import UserController
 
 config = app_config[app_active]
 db = SQLAlchemy(config.APP)
@@ -24,12 +25,30 @@ def create_app(config_name):
     def login():
         return 'Tela de login'
 
+    @app.route('/login/', methods=['POST'])
+    def login_post():
+        user_controller = UserController
+        email = request.form['email']
+        password = request.form['password']
+
+        user = user_controller.login(email, password)
+        if user:
+            return redirect('/admin')
+        else:
+            return render_template('login.htmlm', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': None})
+
     @app.route('/recovery-password/')
     def recovery_password():
         return 'Tela de recuperar a senha'
 
-    @app.route('/profile/<int:id>/')
-    def profile(id):
-        return 'O ID do usuário é %d' % id
+    @app.route('/recovery-password/', methods=['POST'])
+    def send_recovery_password():
+        user_controller = UserController
+        result = user_controller.recovery(request.form['email'])
+
+        if result:
+            return render_template('recovery.html', data={'status': 200, 'msg': 'E-mail de recuperação enviado com sucesso'})
+        else:
+            return render_template('recovery.html', data={'status': 401, 'msg': 'Erro ao enviar e-mail de recuperação'})
 
     return app
