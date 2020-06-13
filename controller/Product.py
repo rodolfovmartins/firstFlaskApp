@@ -23,3 +23,7 @@ class ProductController():
     def update_product(self, obj):
         self.product_model.id = obj['id']
         return self.product_model.update(obj)
+
+    def delete_product(self, id):
+        self.product_model.id = id
+        return self.product_model.delete()

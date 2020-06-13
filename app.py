@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from controller.User import UserController
 from controller.Product import ProductController
 from admin.Admin import start_views
-
+from flask_bootstrap import Bootstrap
 
 config = app_config[app_active]
 
@@ -19,6 +19,7 @@ def create_app(config_name):
     app.config['FLASK_ADMIN_SWATCH'] = 'superhero'
     db = SQLAlchemy(config.APP)
     start_views(app, db)
+    Bootstrap(app)
     db.init_app(app)
 
     @app.route('/')
@@ -27,7 +28,7 @@ def create_app(config_name):
 
     @app.route('/login/')
     def login():
-        return 'Tela de login'
+        return render_template('login.html')
 
     @app.route('/login/', methods=['POST'])
     def login_post():
@@ -74,5 +75,15 @@ def create_app(config_name):
             return 'Editado'
         else:
             return 'Não editado'
+
+    @app.route('/product/<int:id>', methods=['DELETE'])
+    def delete_product(id):
+        product = ProductController()
+        result = product.delete_product(id)
+
+        if result:
+            return 'Deletado'
+        else:
+            return 'Não deletado'
 
     return app

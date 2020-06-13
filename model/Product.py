@@ -52,3 +52,13 @@ class Product(db.Model):
             print(e)
             db.session.rollback()
             return False
+
+    def delete(self):
+        try:
+            db.session.query(Product).filter(Product.id == self.id).delete()
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return False
