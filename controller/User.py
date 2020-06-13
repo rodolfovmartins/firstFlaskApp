@@ -20,5 +20,5 @@ class UserController:
 
         return {}
 
-    def recovery(email):
+    def recovery(self, email):
         return ''

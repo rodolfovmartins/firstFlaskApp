@@ -47,12 +47,32 @@ def create_app(config_name):
 
     @app.route('/recovery-password/', methods=['POST'])
     def send_recovery_password():
-        user_controller = UserController
+        user_controller = UserController()
         result = user_controller.recovery(request.form['email'])
 
         if result:
             return render_template('recovery.html', data={'status': 200, 'msg': 'E-mail de recuperação enviado com sucesso'})
         else:
             return render_template('recovery.html', data={'status': 401, 'msg': 'Erro ao enviar e-mail de recuperação'})
+
+    @app.route('/product/', methods=['POST'])
+    def save_products():
+        product_controller = ProductController()
+        result = product_controller.save_product(request.form)
+
+        if result:
+            return 'Inserido'
+        else:
+            return 'Não inserido'
+
+    @app.route('/product/', methods=['PUT'])
+    def update_products():
+        product = ProductController()
+        result = product.update_product(request.form)
+
+        if result:
+            return 'Editado'
+        else:
+            return 'Não editado'
 
     return app

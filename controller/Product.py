@@ -1,6 +1,7 @@
 from datetime import datetime
 from model.Product import Product
 
+
 class ProductController():
 
     def __init__(self):
@@ -17,4 +18,8 @@ class ProductController():
         self.product_model.category = obj['category']
         self.product_model.user_created = obj['user_created']
 
-        self.product_model.save()
+        return self.product_model.save()
+
+    def update_product(self, obj):
+        self.product_model.id = obj['id']
+        return self.product_model.update(obj)
