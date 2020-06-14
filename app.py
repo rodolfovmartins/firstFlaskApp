@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, Response, json
 from config import app_config, app_active
 from flask_sqlalchemy import SQLAlchemy
 from controller.User import UserController
@@ -21,6 +21,13 @@ def create_app(config_name):
     start_views(app, db)
     Bootstrap(app)
     db.init_app(app)
+
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS')
+        return response
 
     @app.route('/')
     def index():
@@ -85,5 +92,28 @@ def create_app(config_name):
             return 'Deletado'
         else:
             return 'Não deletado'
+
+    @app.route('/products/', methods=['GET'])
+    @app.route('/products/<limit>', methods=['GET'])
+    def products(limit=None):
+        header = {}
+        product_controller = ProductController()
+        response = product_controller.get_products(limit)
+
+        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json', status=response['status'], headers=header)
+
+    @app.route('/product/<product_id>', methods=['GET'])
+    def get_product(product_id):
+        header = {}
+        product_controller = ProductController()
+        response = product_controller.get_product_by_id(product_id)
+        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json', status=response['status'], headers=header)
+
+    @app.route('/user/<user_id>', methods=['GET'])
+    def get_user(user_id):
+        header = {}
+        user_controller = UserController()
+        response = user_controller.get_user_by_id(user_id)
+        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json', status=response['status'], headers=header)
 
     return app
