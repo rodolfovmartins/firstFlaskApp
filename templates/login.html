@@ -15,15 +15,21 @@
 
 {% block content %}
     <form action="/login/" method="post" class="form-sign text-center">
-        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brans/bootstrap-solid.svg" alt="" height="72" width="72" />
+        <img class="mb-4" src="https://flask.palletsprojects.com/en/1.1.x/_images/flask-logo.png" alt="" height="100" width="200" />
 
         <h1 class="h3 mb-3 font-weight-normal">Login</h1>
 
         <div class="checkbox mb-3">
-            <label class="sronly">E-mail</label>
+            <label for="inputEmail" class="sronly"></label>
             <input name="email" type="email" id="inputEmail" class="form-control" placeholder="E-mail" required autofocus />
         </div>
 
+        <div class="checkbox mb-3">
+            <label for="inputPassword" class="sronly"></label>
+            <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Senha" required />
+        </div>
+
+        <button class="btn btn-lg btn-primary" type="submit">Entrar</button>
 
     </form>
 {% endblock %}

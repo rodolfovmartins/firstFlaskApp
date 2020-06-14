@@ -3,6 +3,7 @@ from config import app_active, app_config
 from model.User import User
 from model.Category import Category
 from sqlalchemy.orm import relationship
+from sqlalchemy import func
 
 config = app_config[app_active]
 
@@ -62,3 +63,13 @@ class Product(db.Model):
             print(e)
             db.session.rollback()
             return False
+
+    def get_total_products(self):
+        try:
+            res = db.session.query(func.count(Product.id)).first()
+        except Exception as e:
+            res = []
+            print(e)
+        finally:
+            db.session.close()
+            return res

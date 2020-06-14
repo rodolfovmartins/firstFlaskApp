@@ -32,7 +32,7 @@ def create_app(config_name):
 
     @app.route('/login/', methods=['POST'])
     def login_post():
-        user_controller = UserController
+        user_controller = UserController()
         email = request.form['email']
         password = request.form['password']
 
@@ -40,7 +40,7 @@ def create_app(config_name):
         if user:
             return redirect('/admin')
         else:
-            return render_template('login.htmlm', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': None})
+            return render_template('login.html', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': None})
 
     @app.route('/recovery-password/')
     def recovery_password():
