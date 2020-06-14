@@ -73,3 +73,13 @@ class Product(db.Model):
         finally:
             db.session.close()
             return res
+
+    def get_last_products(self):
+        try:
+            res = db.session.query(Product).order_by(Product.date_created).limit(5).all()
+        except Exception as e:
+            print(e)
+            res = []
+        finally:
+            db.session.close()
+            return res

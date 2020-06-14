@@ -23,12 +23,13 @@ class HomeView(AdminIndexView):
         total_users = user_model.get_total_users()
         total_categories = category_model.get_total_categories()
         total_products = product_model.get_total_products()
+        last_products = product_model.get_last_products()
 
         return self.render('home_admin.html', report={
             'total_users': 0 if not total_users else total_users[0],
             'total_categories': 0 if not total_categories else total_categories[0],
-            'total_products': 0 if not total_products else total_products[0]
-        })
+            'total_products': 0 if not total_products else total_products[0],
+        }, last_products=last_products)
 
 
 class UserView(ModelView):
