@@ -112,9 +112,10 @@ def create_app(config_name):
         else:
             return 'Não deletado'
 
-    @auth_token_required
+
     @app.route('/products/', methods=['GET'])
     @app.route('/products/<limit>', methods=['GET'])
+    @auth_token_required
     def products(limit=None):
         header = {
             'access_token': request.headers['access_token'],
