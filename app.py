@@ -7,11 +7,14 @@ from controller.User import UserController
 from controller.Product import ProductController
 from admin.Admin import start_views
 from flask_bootstrap import Bootstrap
+from flask_login import LoginManager, login_user, logout_user
 
 config = app_config[app_active]
 
 def create_app(config_name):
     app = Flask(__name__, template_folder='templates')
+    login_manage = LoginManager()
+    login_manage.init_app(app)
     app.secret_key = config.SECRET
     app.config.from_object(app_config[app_active])
     app.config.from_pyfile('config.py')
@@ -54,7 +57,7 @@ def create_app(config_name):
 
     @app.route('/login/')
     def login():
-        return render_template('login.html')
+        return render_template('login.html', data ={ 'status': 200, 'msg': None, 'type': None })
 
     @app.route('/login/', methods=['POST'])
     def login_post():
@@ -62,11 +65,15 @@ def create_app(config_name):
         email = request.form['email']
         password = request.form['password']
 
-        user = user_controller.login(email, password)
-        if user:
-            return redirect('/admin')
+        result = user_controller.login(email, password)
+        if result:
+            if result.role == 2:
+                return render_template('login.html', data={'status': 401, 'msg': 'Seu usuário não tem permissão para acessar o admin', 'type': 2})
+            else:
+                login_user(result)
+                return redirect('/admin')
         else:
-            return render_template('login.html', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': None})
+            return render_template('login.html', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': 1})
 
     @app.route('/recovery-password/')
     def recovery_password():
@@ -184,5 +191,15 @@ def create_app(config_name):
                 response['result'] = result
 
         return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json', status=code, headers=header)
+
+    @app.route('/logout')
+    def logout_send():
+        logout_user()
+        return render_template('login.html', data={'status': 200, 'msg': 'Usuário deslogado com sucesso', 'type': 3})
+
+    @login_manage.user_loader
+    def load_user(user_id):
+        user = UserController()
+        return user.get_admin_login(user_id)
 
     return app

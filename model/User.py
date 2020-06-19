@@ -4,12 +4,13 @@ from model.Role import Role
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy.orm import relationship
 from sqlalchemy import func
+from flask_login import UserMixin
 
 config = app_config[app_active]
 
 db = SQLAlchemy(config.APP)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
