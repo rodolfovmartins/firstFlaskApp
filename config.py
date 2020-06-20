@@ -8,6 +8,7 @@ class Config(object):
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     APP = None
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:go1do2fo3@localhost:3306/livro_flask'
+    SENDGRID_API_KEY = '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'
 
 class DevelopmentConfig(Config):
     TESTING = True

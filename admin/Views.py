@@ -4,6 +4,8 @@ from flask_admin import AdminIndexView, expose
 from model.User import User
 from model.Category import Category
 from model.Product import Product
+from flask_login import current_user
+from flask import redirect
 
 config = app_config[app_active]
 
@@ -31,6 +33,14 @@ class HomeView(AdminIndexView):
             'total_products': 0 if not total_products else total_products[0],
         }, last_products=last_products)
 
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
 
 class UserView(ModelView):
 
@@ -84,3 +94,82 @@ class UserView(ModelView):
             else:
                 del form.password
 
+    def is_accessible(self):
+        role = current_user.role
+        if role == 1:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
+class RoleView(ModelView):
+    def is_accessible(self):
+        role = current_user.role
+        if role == 1:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
+class CategoryView(ModelView):
+    def is_accessible(self):
+        role = current_user.role
+        if role == 1:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+        elif role == 3:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
+
+
+class ProductView(ModelView):
+    def is_accessible(self):
+        role = current_user.role
+        if role == 1:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+        elif role == 3:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+        elif role == 4:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/admin')
+        else:
+            return redirect('/login')
